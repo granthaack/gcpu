@@ -8,12 +8,17 @@ module cla_adder(
     //Carry out bit
     output c_out,
     //Sum out bits
-    output [10:0] s
+    output [10:0] s,
+    //Carry out for two's compliment
+    //Represents the carry in bit for the leftmost column
+    output t_c_out
     );
-
+   
     wire [10:0] P_w;
     wire [10:0] G_w;
     wire [11:0] C_w;
+
+    assign t_c_out = C_w[10];
 
     //Instantiate the CLA generator to compute the carry bits
     cla_gen cla_g(.P_in(P_w), .G_in(G_w), .C_in(c_in), .C_out(C_w));

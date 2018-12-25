@@ -43,8 +43,13 @@ module alu #(parameter WIDTH=11)(
     output z_flag
     );
     
+    wire adder_o_w;
+    wire sub_o_w;
+    
     //If C is zero, set the zero flag
     assign z_flag = !c ? 1'b1 : 1'b0;
+    //If any overflow happen, set the overflow flag
+    assign o_flag = adder_o_w | sub_o_w;
     
     wire [WIDTH-1:0] add_w;
     wire [WIDTH-1:0] sub_w;
@@ -59,11 +64,16 @@ module alu #(parameter WIDTH=11)(
         .a(a),
         .b(b),
         .s(add_w),
-        .c_out(o_flag)
+        .c_out(adder_o_w)
     );
     
     //Instantiate the CLA subtractor for the sub opcode
-    //subtractor sub();
+    cla_sub sub(
+        .a(a),
+        .b(b),
+        .o_flag(sub_o_w),
+        .d(sub_w)
+    );
     
     //Instantiate the combinational AND for the and opcode
     com_and #(11)c_and(

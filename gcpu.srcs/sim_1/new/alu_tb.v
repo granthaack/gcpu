@@ -49,7 +49,23 @@ module alu_tb();
     reg z_flag_exp_tb;
     
     initial begin
-    
+        //Test Subtraction
+        op_tb = 1;
+        for(i = 0; i < 2048; i = i + 1) begin
+            for(j = 0; j < 2048; j = j + 1) begin
+                a_tb = i;
+                b_tb = j;
+                c_exp_tb = i - j;
+                #5;
+                if(c_tb != c_exp_tb) begin
+                    $display("ERROR: Expected %d, got %d", c_exp_tb, c_tb);
+                    errors = errors + 1;
+                end
+                else begin
+                    $display("SUCCESS: %d - %d = %d",a_tb, b_tb, c_tb);
+                end
+            end
+        end
         //Test addition
         op_tb = 0;
         for(i = 0; i < 2048; i = i + 1) begin
@@ -63,7 +79,7 @@ module alu_tb();
                     errors = errors + 1;
                 end
                 else begin
-                    $display("SUCCESS: Got %d", c_tb);
+                    $display("SUCCESS: %d + %d = %d",a_tb, b_tb, c_tb);
                 end
             end
         end
