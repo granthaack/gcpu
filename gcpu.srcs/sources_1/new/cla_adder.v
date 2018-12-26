@@ -1,24 +1,22 @@
-// 11 bit CLA adder
+// 11 bit 2's complement CLA adder
 module cla_adder(
     //Inputs to perform addition on
     input [10:0]a,
     input [10:0]b,
     input c_in,
 
-    //Carry out bit
-    output c_out,
+    //Overflow flag
+    output o_flag,
     //Sum out bits
-    output [10:0] s,
-    //Carry out for two's compliment
-    //Represents the carry in bit for the leftmost column
-    output t_c_out
+    output [10:0] s
     );
    
     wire [10:0] P_w;
     wire [10:0] G_w;
     wire [11:0] C_w;
-
-    assign t_c_out = C_w[10];
+    
+    // If the carry out and carry in to the 11th bit differ, there's an overflow
+    assign o_flag = C_w[10] ^ C_w[11];
 
     //Instantiate the CLA generator to compute the carry bits
     cla_gen cla_g(.P_in(P_w), .G_in(G_w), .C_in(c_in), .C_out(C_w));
@@ -48,6 +46,5 @@ module cla_adder(
     assign s[8] = P_w[8] ^ C_w[8];
     assign s[9] = P_w[9] ^ C_w[9];
     assign s[10] = P_w[10] ^ C_w[10];
-    assign c_out = C_w[11];
 
 endmodule

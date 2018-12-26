@@ -48,8 +48,9 @@ module alu #(parameter WIDTH=11)(
     
     //If C is zero, set the zero flag
     assign z_flag = !c ? 1'b1 : 1'b0;
-    //If any overflow happen, set the overflow flag
-    assign o_flag = adder_o_w | sub_o_w;
+    //If any overflow happens, set the overflow flag
+    //This might warrant a full mux eventually, but right now this hacked mux is cheaper
+    assign o_flag = (adder_o_w & (~op[0] & ~op[1] & ~op[2])) | (sub_o_w & (op[0] & ~op[1] & ~op[2]));
     
     wire [WIDTH-1:0] add_w;
     wire [WIDTH-1:0] sub_w;
@@ -64,7 +65,7 @@ module alu #(parameter WIDTH=11)(
         .a(a),
         .b(b),
         .s(add_w),
-        .c_out(adder_o_w)
+        .o_flag(adder_o_w)
     );
     
     //Instantiate the CLA subtractor for the sub opcode
@@ -103,7 +104,7 @@ module alu #(parameter WIDTH=11)(
     );
     
     //Intantiate the 8 mux to multiplex out the result
-    mux8 #(11)mux(
+    mux8 #(11)r_mux(
         .a(add_w),
         .b(sub_w),
         .c(and_w),
@@ -115,5 +116,4 @@ module alu #(parameter WIDTH=11)(
         
         .out(c)
     );
-
 endmodule

@@ -10,7 +10,7 @@ module cla_gen(
     output[11:0]C_out
     );
 
-    //Compute all 11 carry out bits in parallel
+    //Compute all 12 carry out bits in parallel
     assign C_out[0] = C_in;
     assign C_out[1] = G_in[0] | P_in[0] & C_out[0];
     assign C_out[2] = G_in[1] | P_in[1] & C_out[1];
