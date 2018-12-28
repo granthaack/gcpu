@@ -27,7 +27,7 @@
 //OR
 //XOR
 //NOT
-//Two ops left blank for future use
+//Two ops left blank for future use, probably shifts or something
 module alu #(parameter WIDTH=11)(
     //Input A
     input [WIDTH-1:0]a,
@@ -35,6 +35,8 @@ module alu #(parameter WIDTH=11)(
     input [WIDTH-1:0]b,
     //Opcode
     input [2:0]op,
+    //Output enable
+    input oe,
     //Output C
     output [WIDTH-1:0]c,
     //Overflow flag
@@ -58,6 +60,8 @@ module alu #(parameter WIDTH=11)(
     wire [WIDTH-1:0] or_w;
     wire [WIDTH-1:0] xor_w;
     wire [WIDTH-1:0] not_w;
+    
+    wire [WIDTH-1:0] out_buf_w;
 
     //Instantiate the CLA adder for the add opcode
     cla_adder cla(
@@ -99,7 +103,7 @@ module alu #(parameter WIDTH=11)(
     
     //Instantiate the combinational NOT for the not opcode
     com_not #(11)c_not(
-         .a(a),
+        .a(a),
         .c(not_w)
     );
     
@@ -114,6 +118,14 @@ module alu #(parameter WIDTH=11)(
         
         .s(op),
         
+        .out(out_buf_w)
+    );
+    
+    //Create a tristate buffer so the ALU will share the bus
+    tstate_buf #(11) out_buf(
+        .in(out_buf_w),
+        .oe(oe),
         .out(c)
     );
+    
 endmodule

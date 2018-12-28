@@ -20,22 +20,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module mux8 #(parameter WIDTH=11)(
+module mux4 #(parameter WIDTH=11)(
     input [WIDTH-1:0] a,
     input [WIDTH-1:0] b,
     input [WIDTH-1:0] c,
     input [WIDTH-1:0] d,
-    input [WIDTH-1:0] e,
-    input [WIDTH-1:0] f,
-    input [WIDTH-1:0] g,
-    input [WIDTH-1:0] h,
     
-    input [2:0]s,
+    input [1:0]s,
     
     output [WIDTH-1:0] out
     
     );
     
-    assign out = s[2] ? (s[1] ? (s[0] ? (h):(g) ):(s[0] ? (f):(e) ) ) : (s[1] ? (s[0] ? (d):(c) ) : (s[0] ? (b):(a) ));
+    assign out = s[1] ? (s[0] ? d : c) : (s[0] ? b : a);
     
 endmodule

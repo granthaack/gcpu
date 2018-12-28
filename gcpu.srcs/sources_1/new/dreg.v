@@ -21,17 +21,19 @@
 
 //Parameterized tristate d register
 module dreg #(parameter WIDTH=11)(
-    //D input, default width of 8 bit
+    //D input, default width of 11 bits
     input [WIDTH-1:0] d,
-    //Write signal
+    //Write enable
     input wr,
-    //Read signal
+    //Read enable
     input rd,
+    //Chip select
+    input cs,
     //Clock input
     input clk,
     //Reset input, asynchronous
     input rst,
-    //Q output, default width of 8 bit
+    //Q output, default width of 11 bits
     output reg [WIDTH-1:0] q
     );
     always @(posedge clk, posedge rst) begin
@@ -41,11 +43,11 @@ module dreg #(parameter WIDTH=11)(
         end
         //Sync write and read
         else if(clk) begin
-            if(wr) begin
+            if(wr & cs) begin
                 q <= d;
             end
             else begin
-                q <= rd ? q : WIDTH-1'bZ;
+                q <= (rd & cs) ? q : 11'bZ;
             end
         end
     end
