@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 12/22/2018 06:31:02 PM
+// Create Date: 12/29/2018 09:54:38 PM
 // Design Name: 
-// Module Name: mux8
+// Module Name: incrementer
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,18 +20,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module mux4 #(parameter WIDTH=16)(
-    input [WIDTH-1:0] a,
-    input [WIDTH-1:0] b,
-    input [WIDTH-1:0] c,
-    input [WIDTH-1:0] d,
-    
-    input [1:0]sel,
-    
-    output [WIDTH-1:0] out
-    
+module incrementer(
+    input [15:0]in,
+    output [15:0]out
     );
     
-    assign out = sel[1] ? (sel[0] ? d : c) : (sel[0] ? b : a);
+    cla_adder add(
+        .a(in),
+        .b(15'b1),
+        .c_in(15'b0),
+        .s(out)
+    );
     
 endmodule
