@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 //Parameterized d register
-module dreg #(parameter WIDTH=16)(
+module dreg #(parameter WIDTH=16, NAME="DREG")(
     //D input, default width of 16 bits
     input [WIDTH-1:0] d,
     //Write enable
@@ -36,10 +36,12 @@ module dreg #(parameter WIDTH=16)(
     always @(posedge clk, posedge rst) begin
         //Async reset
         if(rst) begin
+            $display("DREG %s: Resetting %s...", NAME, NAME);
             q = 0;
         end
         //Sync write and read
         else if(wr) begin
+            $display("DREG %s: Writing 0x%h, replacing 0x%h", NAME, d, q,);
             q <= d;
         end
     end

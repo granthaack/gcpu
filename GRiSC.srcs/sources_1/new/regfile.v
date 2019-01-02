@@ -52,11 +52,23 @@ module regfile#(parameter WIDTH=16)
     //Declare a 2d array of bytes to create the register file
     reg [WIDTH-1:0]rf [7:0];
     
-    always @(posedge clk) begin
+    always @(posedge clk, rst) begin
         //Use an if/else to make sure that two sources can't
         //write to the reg at the same time from two write ports
-        if(we0) begin
+        if (rst) begin
+            $display("REGFILE: Resetting...");
+            rf[0] <= 0;
+            rf[1] <= 0;
+            rf[2] <= 0;
+            rf[3] <= 0;
+            rf[4] <= 0;
+            rf[5] <= 0;
+            rf[6] <= 0;
+            rf[7] <= 0;
+        end
+        else if(we0) begin
             rf[wa0] <= wd0;
+            $display("REGFILE: Writing 0x%h to 0x%h, replacing 0x%h", wd0, wa0, rf[wa0]);
         end
     end
     

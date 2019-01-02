@@ -84,7 +84,7 @@ module cpu_dp(
     assign ireg_rc_w = ireg_out_w[2:0];    
     
     //Program Counter Data Register
-    dreg pc(
+    dreg #(16,"PC")pc(
         .rst(rst),
         .clk(clk),
         .d(pc_in_w),
@@ -123,7 +123,7 @@ module cpu_dp(
         .out(regfile_in_w)
     );
     
-    dreg ir(
+    dreg #(16,"IR") ir(
         .rst(rst),
         .clk(clk),
         .d(ireg_in_w),
