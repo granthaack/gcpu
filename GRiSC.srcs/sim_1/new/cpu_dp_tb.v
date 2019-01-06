@@ -55,5 +55,10 @@ module cpu_dp_tb();
         reg clk;
         reg rst;
     
-        cpu_dp DUT();
+        cpu_dp DUT(
+            .data_mem_in(data_mem_in),
+            .data_mem_out(data_mem_out),
+            .instr_mem_in(instr_mem_in),
+            .data_mem_addr(data_mem_addr)
+        );
 endmodule
