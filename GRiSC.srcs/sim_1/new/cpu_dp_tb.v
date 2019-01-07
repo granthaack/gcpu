@@ -56,6 +56,9 @@ module cpu_dp_tb();
         //Basic Control Signals
         reg clk;
         reg rst;
+        
+        //Some instructions require bus reads/writes, and therefore, multiple ticks. Use this to keep track of that.
+        reg [1:0]instr_state;
     
         cpu_dp DUT(
             .data_mem_in(data_mem_in),
@@ -85,9 +88,9 @@ module cpu_dp_tb();
         //Perform a clock tick
         task tick;
             begin
-                clk = 1;
-                #5;
                 clk = 0;
+                #5;
+                clk = 1;
                 #5;
             end
         endtask
@@ -145,9 +148,9 @@ module cpu_dp_tb();
         
         task instr_decode;
             begin
-                //Always increase the program counter
-                pc_mux_sel = 2'b10;
-                pc_wr = 1;
+                $display("Current Instruction State: %d", instr_state);
+                //Perform PC handling at the end of each of the instruction decoding states
+                pc_wr = 0;
                 
                 //Decode ADD instruction
                 if(opcode == 3'b000) begin
@@ -155,42 +158,80 @@ module cpu_dp_tb();
                 
                 //Decode LW instruction
                 else if (opcode == 3'b100) begin
-                    //Enable write to the regfile
-                    regfile_we0 = 1;
-                    //Mux sign-extended immediate to the ALU
-                    alu_a_mux_sel = 0;
-                    //Mux the data at rd0 to the ALU
-                    alu_b_mux_sel = 1;
-                    //Perform an addition in the ALU to get the offset data address
-                    alu_opcode = 0;
-                    //Ask the BIU for data from the data memory
-                    get_data_mem = 1;
-                    //Mux the data from data memory to the register file
-                    regfile_wd0_mux_sel = 2'b10;
+                    if(instr_state == 0) begin
+                        //First, put address on the bus
+                        //Mux sign-extended immediate to the ALU
+                        alu_a_mux_sel = 0;
+                        //Mux the data at rd0 to the ALU
+                        alu_b_mux_sel = 1;
+                        //Perform an addition in the ALU to get the offset data address
+                        alu_opcode = 0;
+                        //Ask the BIU to perform a read bus cycle on data memory
+                        get_data_mem = 1;
+                        //Increment the state
+                        instr_state = 1;
+                    end
+                    
+                    else if(instr_state == 1) begin
+                        //Wait state, BIU is handling
+                        instr_state = 2;
+                    end
+                    
+                    else if(instr_state == 2) begin
+                        //BIU is handling the bus right now
+                        //Enable write to the regfile
+                        regfile_we0 = 1;
+                        //Mux the data from data memory to the register file
+                        regfile_wd0_mux_sel = 2'b10;
+                        instr_state = 3;
+                    end
+                    
+                    else if(instr_state == 3) begin
+                        //BIU is handling the bus right now
+                        //Don't write to the regfile again
+                        regfile_we0 = 0;
+                        //Increase the program counter
+                        pc_mux_sel = 2'b10;
+                        pc_wr = 1;
+                        instr_state = 0;
+                    end
                 end
-                
+                $display("Before tick...");
                 //Perform a tick to do the instruction
                 tick();
+                $display("After tick...");
             end
         endtask
         
         initial begin
+            //Init the instruction state
+            instr_state = 0;
             //Init reset and clock
             init_ctrl_signals();
             reset();
             tick();
-            //Test Instruction Fetch
-            //Fetch a store word instruction
-            instr_fetch({3'b100,3'b000,3'b000,7'b0000000});
+            
             //Put some data on the data bus
             data_mem_in = 16'haaaa;
-            //Perform the store word
-            instr_decode();
             
             //Fetch a store word instruction
-            instr_fetch({3'b100,3'b001,3'b000,7'b0000001});
-            //Put more data on the data bus
-            data_mem_in = 16'haaaa;
+            instr_fetch({3'b100,3'b000,3'b000,7'b0000000});
+            //Perform the store word, need 4 cycles
             instr_decode();
+            instr_decode();
+            instr_decode();
+            instr_decode();
+            
+            //Put some data on the data bus
+            data_mem_in = 16'h5555;
+            
+            //Fetch another store word instruction
+            instr_fetch({3'b100,3'b001,3'b000,7'b0000001});
+            //Perform the store word, need 4 cycles
+            instr_decode();
+            instr_decode();
+            instr_decode();
+            instr_decode();
+            
         end
 endmodule
