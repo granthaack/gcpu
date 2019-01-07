@@ -22,20 +22,16 @@
 
 module cpu_dp(
         //Data lines
-        output  [15:0]data_mem_in,
-        input   [15:0]data_mem_out,
+        //Data coming IN FROM the memory
+        input  [15:0]data_mem_in,
+        //Data going OUT TO the memory
+        output   [15:0]data_mem_out,
+        //Data coming IN FROM the memory
         input   [15:0]instr_mem_in,
         
         //Address Lines
         output  [15:0]data_mem_addr,
         output  [15:0]instr_mem_addr,
-        
-        //Signals for the BIU
-        output give_instr_addr,
-        output get_instr_mem,
-        output give_data_addr,
-        output get_data_mem,
-        output give_data_mem,
         
         //Inputs from Control System
         input regfile_rd1_mux_sel,
@@ -45,6 +41,8 @@ module cpu_dp(
         input alu_b_mux_sel,
         input [1:0]pc_mux_sel,
         input alu_opcode,
+        input ireg_wr,
+        input pc_wr,
         
         //Feedback to Control System
         output not_eq,
@@ -65,7 +63,6 @@ module cpu_dp(
     wire [15:0]pc_out_w;
     wire [15:0]ireg_out_w;
     wire [15:0]pc_in_w;
-    wire [15:0]ireg_in_w;
     wire [6:0] stender_in_w;
     wire [9:0] shifter_in_w;
     wire [15:0] inc_out_w;
@@ -74,21 +71,25 @@ module cpu_dp(
     wire [2:0]  ireg_rb_w;
     wire [2:0]  ireg_rc_w;
     wire [2:0] rd1_mux_out_w;
-    
-    assign regfile_rd1_w = data_mem_in;
+        
+    assign regfile_rd1_w = data_mem_out;
     assign opcode = ireg_out_w[15:13];
     assign stender_in_w = ireg_out_w[6:0];
     assign shifter_in_w = ireg_out_w[9:0];
     assign ireg_ra_w = ireg_out_w[12:10];
     assign ireg_rb_w = ireg_out_w[9:7];
-    assign ireg_rc_w = ireg_out_w[2:0];    
+    assign ireg_rc_w = ireg_out_w[2:0];
+    assign data_mem_addr = alu_out_w;
+    
+    assign instr_mem_addr = pc_out_w;   
     
     //Program Counter Data Register
     dreg #(16,"PC")pc(
         .rst(rst),
         .clk(clk),
         .d(pc_in_w),
-        .q(pc_out_w)
+        .q(pc_out_w),
+        .wr(pc_wr)
     );
     
     //Incrementer
@@ -111,6 +112,7 @@ module cpu_dp(
         .a(alu_out_w),
         .b(beq_adder_out_w),
         .c(inc_out_w),
+        .d(pc_out_w),
         .sel(pc_mux_sel),
         .out(pc_in_w)
     );
@@ -118,7 +120,7 @@ module cpu_dp(
     mux4 regfile_wd0_mux(
         .a(inc_out_w),
         .b(alu_out_w),
-        .c(data_mem_out),
+        .c(data_mem_in),
         .sel(regfile_wd0_mux_sel),
         .out(regfile_in_w)
     );
@@ -126,11 +128,12 @@ module cpu_dp(
     dreg #(16,"IR") ir(
         .rst(rst),
         .clk(clk),
-        .d(ireg_in_w),
-        .q(ireg_out_w)
+        .d(instr_mem_in),
+        .q(ireg_out_w),
+        .wr(ireg_wr)
     );
     
-    mux2 regfile_rd1_mux(
+    mux2 #(3)regfile_rd1_mux(
         .a(ireg_ra_w),
         .b(ireg_rc_w),
         .out(rd1_mux_out_w),

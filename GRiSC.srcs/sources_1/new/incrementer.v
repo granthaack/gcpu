@@ -27,8 +27,8 @@ module incrementer(
     
     cla_adder add(
         .a(in),
-        .b(15'b1),
-        .c_in(15'b0),
+        .b(16'b1),
+        .c_in(1'b0),
         .s(out)
     );
     

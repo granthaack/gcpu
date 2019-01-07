@@ -1,0 +1,22 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../GRiSC.srcs/sources_1/new/alu.v" \
+"../../../../GRiSC.srcs/sources_1/new/cla_adder.v" \
+"../../../../GRiSC.srcs/sources_1/new/cla_gen.v" \
+"../../../../GRiSC.srcs/sources_1/new/com_nand.v" \
+"../../../../GRiSC.srcs/sources_1/new/cpu_dp.v" \
+"../../../../GRiSC.srcs/sources_1/new/dreg.v" \
+"../../../../GRiSC.srcs/sources_1/new/half_adder.v" \
+"../../../../GRiSC.srcs/sources_1/new/incrementer.v" \
+"../../../../GRiSC.srcs/sources_1/new/lshift6.v" \
+"../../../../GRiSC.srcs/sources_1/new/mux2.v" \
+"../../../../GRiSC.srcs/sources_1/new/mux4.v" \
+"../../../../GRiSC.srcs/sources_1/new/regfile.v" \
+"../../../../GRiSC.srcs/sources_1/new/sign_extender.v" \
+"../../../../GRiSC.srcs/sim_1/new/cpu_dp_tb.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

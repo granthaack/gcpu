@@ -1,0 +1,20 @@
+0.6
+2018.2
+Jun 14 2018
+20:07:38
+/home/grant/projects/gcpu/GRiSC.sim/sim_1/behav/xsim/glbl.v,1529022455,verilog,,,,glbl,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sim_1/new/cpu_dp_tb.v,1546839632,verilog,,,,cpu_dp_tb,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sim_1/new/dreg_tb.v,1546831463,verilog,,,,dreg_tb,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/alu.v,1546808461,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/cla_adder.v,,alu,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/cla_adder.v,1546808461,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/cla_gen.v,,cla_adder,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/cla_gen.v,1546808461,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/com_nand.v,,cla_gen,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/com_nand.v,1546808461,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/cpu_dp.v,,com_nand,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/cpu_dp.v,1546836755,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/dreg.v,,cpu_dp,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/dreg.v,1546828156,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/half_adder.v,,dreg,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/half_adder.v,1546808461,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/incrementer.v,,half_adder,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/incrementer.v,1546836618,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/lshift6.v,,incrementer,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/lshift6.v,1546836086,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/mux2.v,,lshift6,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/mux2.v,1546808461,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/mux4.v,,mux2,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/mux4.v,1546808461,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/regfile.v,,mux4,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/regfile.v,1546826371,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/sign_extender.v,,regfile,,,,,,,,
+/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/sign_extender.v,1546808461,verilog,,/home/grant/projects/gcpu/GRiSC.srcs/sim_1/new/cpu_dp_tb.v,,stender7,,,,,,,,

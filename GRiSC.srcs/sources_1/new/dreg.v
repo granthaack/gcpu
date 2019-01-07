@@ -41,7 +41,7 @@ module dreg #(parameter WIDTH=16, NAME="DREG")(
         end
         //Sync write and read
         else if(wr) begin
-            $display("DREG %s: Writing 0x%h, replacing 0x%h", NAME, d, q,);
+            $display("DREG %s: Writing %h, replacing %h", NAME, d, q,);
             q <= d;
         end
     end

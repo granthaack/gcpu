@@ -1,0 +1,28 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/alu.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module alu
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/cla_adder.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cla_adder
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/cla_gen.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cla_gen
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/com_nand.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module com_nand
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/cpu_dp.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cpu_dp
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/dreg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dreg
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/half_adder.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module half_adder
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/incrementer.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module incrementer
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/lshift6.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module lshift6
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/mux2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mux2
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/mux4.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mux4
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/regfile.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module regfile
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sources_1/new/sign_extender.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module stender7
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/grant/projects/gcpu/GRiSC.srcs/sim_1/new/cpu_dp_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module cpu_dp_tb

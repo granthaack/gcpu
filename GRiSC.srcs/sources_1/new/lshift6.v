@@ -21,7 +21,7 @@
 
 
 module lshift6(
-        input [8:0]in,
+        input [9:0]in,
         output [15:0]out
     );
     

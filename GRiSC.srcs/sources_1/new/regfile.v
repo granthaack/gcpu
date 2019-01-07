@@ -52,7 +52,7 @@ module regfile#(parameter WIDTH=16)
     //Declare a 2d array of bytes to create the register file
     reg [WIDTH-1:0]rf [7:0];
     
-    always @(posedge clk, rst) begin
+    always @(posedge clk, posedge rst) begin
         //Use an if/else to make sure that two sources can't
         //write to the reg at the same time from two write ports
         if (rst) begin
