@@ -162,14 +162,17 @@ module cpu_dp_tb();
                     alu_a_mux_sel = 1'b1;
                     //Mux rd0 output of regfile to ALU B
                     alu_b_mux_sel = 1'b1;
+                    //Set ALU to perform addition
+                    alu_opcode = 1'b0;
                     //Enable write on the regfile
-                    regfile_we0 = 1;
+                    regfile_we0 = 1'b1;
                     //Mux output of incrementer to the program counter
                     pc_mux_sel = 2'b10;
                     //Enable write on the program counter
                     pc_wr = 1'b1;
                 end
                 
+                //Decode ADDI instruction
                 if(opcode == 3'b001) begin
                     //Mux output of ALU back into the regfile
                     regfile_wd0_mux_sel = 2'b01;
@@ -177,8 +180,30 @@ module cpu_dp_tb();
                     alu_a_mux_sel = 1'b0;
                     //Mux rd1 output of regfile to ALU A
                     alu_b_mux_sel = 1'b1;
+                    //Set ALU to perform addition
+                    alu_opcode = 1'b0;
                     //Enable write on the regfile
-                    regfile_we0 = 1;
+                    regfile_we0 = 1'b1;
+                    //Mux output of incrementer to the program counter
+                    pc_mux_sel = 2'b10;
+                    //Enable write on the program counter
+                    pc_wr = 1'b1;
+                end
+                
+                //Decode NAND instruction
+                if(opcode == 3'b010) begin
+                    //Mux rc from instruction to rd1
+                    regfile_rd1_mux_sel = 1'b1;
+                    //Mux output of ALU back into the regfile
+                    regfile_wd0_mux_sel = 2'b01;
+                    //Mux rd1 output of regfile to ALU A
+                    alu_a_mux_sel = 1'b1;
+                    //Mux rd0 output of regfile to ALU B
+                    alu_b_mux_sel = 1'b1;
+                    //Set ALU to perform NAND
+                    alu_opcode = 1'b1;
+                    //Enable write on the regfile
+                    regfile_we0 = 1'b1;
                     //Mux output of incrementer to the program counter
                     pc_mux_sel = 2'b10;
                     //Enable write on the program counter
@@ -272,6 +297,11 @@ module cpu_dp_tb();
             //Fetch an add immediate instruction
             //Add contents of reg2 and the immediate value -2, store in reg3
             instr_fetch({3'b001, 3'b011, 3'b010, 7'b1111110});
+            instr_decode();
+            
+            //Fetch a NAND instruction
+            //NAND contents of reg3 and reg2, store in reg4
+            instr_fetch({3'b010, 3'b100, 3'b011, 4'b0000, 3'b010});
             instr_decode();
         end
 endmodule

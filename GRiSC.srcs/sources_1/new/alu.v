@@ -55,4 +55,8 @@ module alu(
         .out(c)
     );
     
+    always @(*) begin
+        $display("ALU output: %h", c);
+    end
+    
 endmodule
