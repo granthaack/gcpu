@@ -154,10 +154,24 @@ module cpu_dp_tb();
                 
                 //Decode ADD instruction
                 if(opcode == 3'b000) begin
+                    //Mux rc from instruction to rd1
+                    regfile_rd1_mux_sel = 1'b1;
+                    //Mux output of ALU back into the regfile
+                    regfile_wd0_mux_sel = 2'b01;
+                    //Mux rd1 output of regfile to ALU A
+                    alu_a_mux_sel = 1'b1;
+                    //Mux rd0 output of regfile to ALU B
+                    alu_b_mux_sel = 1'b1;
+                    //Enable write on the regfile
+                    regfile_we0 = 1;
+                    //Mux output of incrementer to the program counter
+                    pc_mux_sel = 2'b10;
+                    //Enable write on the program counter
+                    pc_wr = 1'b1;
                 end
                 
                 //Decode LW instruction
-                else if (opcode == 3'b100) begin
+                else if (opcode == 3'b101) begin
                     if(instr_state == 0) begin
                         //First, put address on the bus
                         //Mux sign-extended immediate to the ALU
@@ -212,10 +226,11 @@ module cpu_dp_tb();
             tick();
             
             //Put some data on the data bus
-            data_mem_in = 16'haaaa;
+            data_mem_in = 16'h0008;
             
-            //Fetch a store word instruction
-            instr_fetch({3'b100,3'b000,3'b000,7'b0000000});
+            //Fetch a load word instruction
+            //Load the memory at location: (Contents of reg 0) + 0 to reg0
+            instr_fetch({3'b101,3'b000,3'b000,7'b0000000});
             //Perform the store word, need 4 cycles
             instr_decode();
             instr_decode();
@@ -223,15 +238,20 @@ module cpu_dp_tb();
             instr_decode();
             
             //Put some data on the data bus
-            data_mem_in = 16'h5555;
+            data_mem_in = 16'h0001;
             
-            //Fetch another store word instruction
-            instr_fetch({3'b100,3'b001,3'b000,7'b0000001});
+            //Fetch another load word instruction
+            //Load the memory at location: (Contents of reg 0) + 1 to reg1
+            instr_fetch({3'b101,3'b001,3'b000,7'b0000001});
             //Perform the store word, need 4 cycles
             instr_decode();
             instr_decode();
             instr_decode();
             instr_decode();
             
+            //Fetch an add instruction
+            //Add contents of reg0 and reg1 to reg2
+            instr_fetch({3'b000, 3'b010, 3'b000, 4'b0000, 3'b001});
+            instr_decode();
         end
 endmodule

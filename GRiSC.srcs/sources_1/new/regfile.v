@@ -53,7 +53,7 @@ module regfile#(parameter WIDTH=16)
     reg [WIDTH-1:0]rf [7:0];
     
     //Write on the negative edge of the clock to ensure the data is stable
-    always @(negedge clk, posedge rst) begin
+    always @(posedge clk, posedge rst) begin
         //Use an if/else to make sure that two sources can't
         //write to the reg at the same time from two write ports
         if (rst) begin
@@ -73,7 +73,7 @@ module regfile#(parameter WIDTH=16)
         end
     end
     
-    //Asynchronous reads with output enable
+    //Asynchronous reads
     assign rd0 = rf[ra0];
     assign rd1 = rf[ra1];
 endmodule
