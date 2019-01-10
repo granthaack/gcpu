@@ -25,6 +25,10 @@ module stender7(
         output [15:0]out
     );
     
-    assign out = in[5] ? {9'b1, in} : {9'b0, in};
+    assign out = in[6] ? {9'b111111111, in} : {9'b000000000, in};
+    
+    always @(*) begin
+        $display("Extender is %b", out);
+    end
     
 endmodule

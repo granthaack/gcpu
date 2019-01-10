@@ -170,6 +170,21 @@ module cpu_dp_tb();
                     pc_wr = 1'b1;
                 end
                 
+                if(opcode == 3'b001) begin
+                    //Mux output of ALU back into the regfile
+                    regfile_wd0_mux_sel = 2'b01;
+                    //Mux sign extended output from instruction to ALU B
+                    alu_a_mux_sel = 1'b0;
+                    //Mux rd1 output of regfile to ALU A
+                    alu_b_mux_sel = 1'b1;
+                    //Enable write on the regfile
+                    regfile_we0 = 1;
+                    //Mux output of incrementer to the program counter
+                    pc_mux_sel = 2'b10;
+                    //Enable write on the program counter
+                    pc_wr = 1'b1;
+                end
+                
                 //Decode LW instruction
                 else if (opcode == 3'b101) begin
                     if(instr_state == 0) begin
@@ -241,7 +256,7 @@ module cpu_dp_tb();
             data_mem_in = 16'h0001;
             
             //Fetch another load word instruction
-            //Load the memory at location: (Contents of reg 0) + 1 to reg1
+            //Load the memory at location: (Contents of reg 0) + immediate value 1 to reg1
             instr_fetch({3'b101,3'b001,3'b000,7'b0000001});
             //Perform the store word, need 4 cycles
             instr_decode();
@@ -250,8 +265,13 @@ module cpu_dp_tb();
             instr_decode();
             
             //Fetch an add instruction
-            //Add contents of reg0 and reg1 to reg2
+            //Add contents of reg0 and reg1, store in reg2
             instr_fetch({3'b000, 3'b010, 3'b000, 4'b0000, 3'b001});
+            instr_decode();
+            
+            //Fetch an add immediate instruction
+            //Add contents of reg2 and the immediate value -2, store in reg3
+            instr_fetch({3'b001, 3'b011, 3'b010, 7'b1111110});
             instr_decode();
         end
 endmodule
