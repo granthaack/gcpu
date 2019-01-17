@@ -45,7 +45,7 @@ module cpu_dp_tb();
         reg alu_a_mux_sel;
         reg alu_b_mux_sel;
         reg [1:0]pc_mux_sel;
-        reg alu_opcode;
+        reg [1:0]alu_opcode;
         reg ireg_wr;
         reg pc_wr;
         
@@ -163,7 +163,7 @@ module cpu_dp_tb();
                     //Mux rd0 output of regfile to ALU B
                     alu_b_mux_sel = 1'b1;
                     //Set ALU to perform addition
-                    alu_opcode = 1'b0;
+                    alu_opcode = 2'b00;
                     //Enable write on the regfile
                     regfile_we0 = 1'b1;
                     //Mux output of incrementer to the program counter
@@ -181,7 +181,7 @@ module cpu_dp_tb();
                     //Mux rd1 output of regfile to ALU A
                     alu_b_mux_sel = 1'b1;
                     //Set ALU to perform addition
-                    alu_opcode = 1'b0;
+                    alu_opcode = 2'b00;
                     //Enable write on the regfile
                     regfile_we0 = 1'b1;
                     //Mux output of incrementer to the program counter
@@ -201,7 +201,23 @@ module cpu_dp_tb();
                     //Mux rd0 output of regfile to ALU B
                     alu_b_mux_sel = 1'b1;
                     //Set ALU to perform NAND
-                    alu_opcode = 1'b1;
+                    alu_opcode = 2'b01;
+                    //Enable write on the regfile
+                    regfile_we0 = 1'b1;
+                    //Mux output of incrementer to the program counter
+                    pc_mux_sel = 2'b10;
+                    //Enable write on the program counter
+                    pc_wr = 1'b1;
+                end
+                
+                //Decode LUI instruction
+                if(opcode == 3'b011) begin
+                    //Pass ALU input B through the ALU
+                    alu_opcode = 2'b11;
+                    //Mux output of the left shift into B on the ALU
+                    alu_b_mux_sel = 1'b0;
+                    //Mux the output of the ALU back into the regfile
+                    regfile_wd0_mux_sel = 2'b01;
                     //Enable write on the regfile
                     regfile_we0 = 1'b1;
                     //Mux output of incrementer to the program counter

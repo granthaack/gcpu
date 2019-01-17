@@ -24,8 +24,8 @@ module alu(
         //16 bit inputs to the ALU
         input [15:0] a,
         input [15:0] b,
-        //1 bit opcode, add or NAND
-        input opcode,
+        //2 bit opcode, add, NAND, pass through a, pass through b
+        input [1:0]opcode,
         output [15:0]c,
         output not_eq
     );
@@ -48,15 +48,13 @@ module alu(
         .s(add_out_w)
     );
     
-    mux2 out_mux(
+    mux4 out_mux(
         .a(add_out_w),
         .b(nand_out_w),
+        .c(a),
+        .d(b),
         .sel(opcode),
         .out(c)
     );
-    
-    always @(*) begin
-        $display("ALU output: %h", c);
-    end
     
 endmodule

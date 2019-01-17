@@ -40,7 +40,7 @@ module cpu_dp(
         input alu_a_mux_sel,
         input alu_b_mux_sel,
         input [1:0]pc_mux_sel,
-        input alu_opcode,
+        input [1:0]alu_opcode,
         input ireg_wr,
         input pc_wr,
         
