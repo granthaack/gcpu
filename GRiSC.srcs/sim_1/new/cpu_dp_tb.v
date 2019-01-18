@@ -306,6 +306,18 @@ module cpu_dp_tb();
                 
                 //Perform JALR instruction
                 if(opcode == 3'b111) begin
+                    //Pass ALU input B through the ALU
+                    alu_opcode = 2'b11;
+                    //Mux output of the rd1 into B on the ALU
+                    alu_b_mux_sel = 1'b1;
+                    //Mux output of PC incrementer to register file
+                    regfile_wd0_mux_sel = 2'b00;
+                    //Mux output of ALU into the PC
+                    pc_mux_sel = 1'b0;
+                    //Enable writes on the regfile
+                    regfile_we0 = 1'b1;
+                    //Enable write on the PC
+                    pc_wr = 1'b1;
                 end
                 
                 //Wait the 5 nanoseconds
@@ -393,5 +405,10 @@ module cpu_dp_tb();
             instr_fetch({3'b110, 3'b101, 3'b110, 7'b0000100});
             instr_decode();
             
+            $display("Performing JALR instruction...");
+            //Fetch a JALR instruction
+            //Jump to the location at reg1, store current PC at reg7
+            instr_fetch({3'b111, 3'b111, 3'b001, 7'b0000000});
+            instr_decode();
         end
 endmodule
