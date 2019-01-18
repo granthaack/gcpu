@@ -12,13 +12,13 @@ Compiling module xil_defaultlib.cla_gen
 Compiling module xil_defaultlib.half_adder
 Compiling module xil_defaultlib.cla_adder
 Compiling module xil_defaultlib.incrementer
+Compiling module xil_defaultlib.mux2
 Compiling module xil_defaultlib.mux4
 Compiling module xil_defaultlib.dreg(NAME="IR")
 Compiling module xil_defaultlib.mux2(WIDTH=3)
 Compiling module xil_defaultlib.regfile
 Compiling module xil_defaultlib.lshift6
 Compiling module xil_defaultlib.stender7
-Compiling module xil_defaultlib.mux2
 Compiling module xil_defaultlib.com_nand
 Compiling module xil_defaultlib.alu
 Compiling module xil_defaultlib.cpu_dp

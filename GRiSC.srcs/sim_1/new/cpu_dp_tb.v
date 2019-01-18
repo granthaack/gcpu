@@ -44,7 +44,8 @@ module cpu_dp_tb();
         reg [1:0]regfile_wd0_mux_sel;
         reg alu_a_mux_sel;
         reg alu_b_mux_sel;
-        reg [1:0]pc_mux_sel;
+        reg pc_mux_sel;
+        wire beq_override;
         reg [1:0]alu_opcode;
         reg ireg_wr;
         reg pc_wr;
@@ -59,6 +60,9 @@ module cpu_dp_tb();
         
         //Some instructions require bus reads/writes, and therefore, multiple ticks. Use this to keep track of that.
         reg [1:0]instr_state;
+        
+        //If performing a BEQ instruction and the not_eq signal is false, then override the program counter
+        assign beq_override = ((opcode == 3'b110) & ~not_eq) ? 1 : 0;
     
         cpu_dp DUT(
             .data_mem_in(data_mem_in),
@@ -77,6 +81,7 @@ module cpu_dp_tb();
             .alu_opcode(alu_opcode),
             .ireg_wr(ireg_wr),
             .pc_wr(pc_wr),
+            .beq_override(beq_override),
                        
             .not_eq(not_eq),
             .opcode(opcode),
@@ -88,8 +93,20 @@ module cpu_dp_tb();
         //Perform a clock tick
         task tick;
             begin
+                tick_down();
+                tick_up();
+            end
+        endtask
+        
+        task tick_down;
+            begin
                 clk = 0;
                 #5;
+            end
+        endtask
+        
+        task tick_up;
+            begin
                 clk = 1;
                 #5;
             end
@@ -148,6 +165,8 @@ module cpu_dp_tb();
         
         task instr_decode;
             begin
+                $display("Before tick down");
+                clk = 0;
                 $display("Current Instruction State: %d", instr_state);
                 //Perform PC handling at the end of each of the instruction decoding states
                 pc_wr = 0;
@@ -167,7 +186,7 @@ module cpu_dp_tb();
                     //Enable write on the regfile
                     regfile_we0 = 1'b1;
                     //Mux output of incrementer to the program counter
-                    pc_mux_sel = 2'b10;
+                    pc_mux_sel = 1'b1;
                     //Enable write on the program counter
                     pc_wr = 1'b1;
                 end
@@ -185,7 +204,7 @@ module cpu_dp_tb();
                     //Enable write on the regfile
                     regfile_we0 = 1'b1;
                     //Mux output of incrementer to the program counter
-                    pc_mux_sel = 2'b10;
+                    pc_mux_sel = 1'b1;
                     //Enable write on the program counter
                     pc_wr = 1'b1;
                 end
@@ -205,7 +224,7 @@ module cpu_dp_tb();
                     //Enable write on the regfile
                     regfile_we0 = 1'b1;
                     //Mux output of incrementer to the program counter
-                    pc_mux_sel = 2'b10;
+                    pc_mux_sel = 1'b1;
                     //Enable write on the program counter
                     pc_wr = 1'b1;
                 end
@@ -221,13 +240,13 @@ module cpu_dp_tb();
                     //Enable write on the regfile
                     regfile_we0 = 1'b1;
                     //Mux output of incrementer to the program counter
-                    pc_mux_sel = 2'b10;
+                    pc_mux_sel = 1'b1;
                     //Enable write on the program counter
                     pc_wr = 1'b1;
                 end
                 
                 //Decode LW instruction
-                else if (opcode == 3'b101) begin
+                else if (opcode == 3'b100) begin
                     if(instr_state == 0) begin
                         //First, put address on the bus
                         //Mux sign-extended immediate to the ALU
@@ -261,15 +280,40 @@ module cpu_dp_tb();
                         //Don't write to the regfile again
                         regfile_we0 = 0;
                         //Increase the program counter
-                        pc_mux_sel = 2'b10;
+                        pc_mux_sel = 1'b1;
                         pc_wr = 1;
                         instr_state = 0;
                     end
                 end
-                $display("Before tick...");
-                //Perform a tick to do the instruction
-                tick();
-                $display("After tick...");
+                
+                //Perform SW instruction
+                if(opcode == 3'b101) begin
+                end
+                
+                //Perform BEQ instruction
+                if(opcode == 3'b110) begin
+                    //Mux RA into the regfile input
+                    regfile_rd1_mux_sel = 1'b0;
+                    //Mux rd1 output of regfile to ALU A
+                    alu_a_mux_sel = 1'b1;
+                    //Mux rd0 output of regfile to ALU B
+                    alu_b_mux_sel = 1'b1;
+                    //If the inputs to the ALU aren't equal, this will be overridden
+                    pc_mux_sel = 1'b1;
+                    //Enable write on the program counter
+                    pc_wr = 1'b1;
+                end
+                
+                //Perform JALR instruction
+                if(opcode == 3'b111) begin
+                end
+                
+                //Wait the 5 nanoseconds
+                $display("After tick down");
+                #5;
+                $display("Ticking up...");
+                tick_up();
+                $display("Ticked up");
             end
         endtask
         
@@ -284,9 +328,10 @@ module cpu_dp_tb();
             //Put some data on the data bus
             data_mem_in = 16'h0008;
             
+            $display("Performing LW instruction...");
             //Fetch a load word instruction
             //Load the memory at location: (Contents of reg 0) + 0 to reg0
-            instr_fetch({3'b101,3'b000,3'b000,7'b0000000});
+            instr_fetch({3'b100,3'b000,3'b000,7'b0000000});
             //Perform the store word, need 4 cycles
             instr_decode();
             instr_decode();
@@ -296,28 +341,57 @@ module cpu_dp_tb();
             //Put some data on the data bus
             data_mem_in = 16'h0001;
             
+            $display("Performing LW instruction...");
             //Fetch another load word instruction
             //Load the memory at location: (Contents of reg 0) + immediate value 1 to reg1
-            instr_fetch({3'b101,3'b001,3'b000,7'b0000001});
+            instr_fetch({3'b100,3'b001,3'b000,7'b0000001});
             //Perform the store word, need 4 cycles
             instr_decode();
             instr_decode();
             instr_decode();
             instr_decode();
             
+            $display("Performing ADD instruction...");
             //Fetch an add instruction
             //Add contents of reg0 and reg1, store in reg2
             instr_fetch({3'b000, 3'b010, 3'b000, 4'b0000, 3'b001});
             instr_decode();
             
+            $display("Performing ADDI instruction...");
             //Fetch an add immediate instruction
             //Add contents of reg2 and the immediate value -2, store in reg3
             instr_fetch({3'b001, 3'b011, 3'b010, 7'b1111110});
             instr_decode();
             
+            $display("Performing NAND instruction...");
             //Fetch a NAND instruction
             //NAND contents of reg3 and reg2, store in reg4
             instr_fetch({3'b010, 3'b100, 3'b011, 4'b0000, 3'b010});
             instr_decode();
+            
+            $display("Performing LUI instruction...");
+            //Fetch a LUI instruction
+            //Load immediate value b1001010110 to reg5
+            instr_fetch({3'b011, 3'b101, 10'b1001010110});
+            instr_decode();
+            
+            $display("Performing BEQ instruction...");
+            //Fetch a BEQ instruction
+            //Branch if reg5 and reg6 are equal
+            instr_fetch({3'b110, 3'b101, 3'b110, 7'b0001000});
+            instr_decode();
+            
+            $display("Performing LUI instruction...");
+            //Fetch a LUI instruction
+            //Load immediate value b1001010110 to reg6
+            instr_fetch({3'b011, 3'b110, 10'b1001010110});
+            instr_decode();
+            
+            $display("Performing BEQ instruction...");
+            //Fetch a BEQ instruction
+            //Branch of reg5 and reg6 are equal
+            instr_fetch({3'b110, 3'b101, 3'b110, 7'b0000100});
+            instr_decode();
+            
         end
 endmodule

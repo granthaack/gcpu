@@ -39,10 +39,11 @@ module cpu_dp(
         input [1:0]regfile_wd0_mux_sel,
         input alu_a_mux_sel,
         input alu_b_mux_sel,
-        input [1:0]pc_mux_sel,
+        input pc_mux_sel,
         input [1:0]alu_opcode,
         input ireg_wr,
         input pc_wr,
+        input beq_override,
         
         //Feedback to Control System
         output not_eq,
@@ -61,6 +62,7 @@ module cpu_dp(
     wire [15:0]alu_b_in_w;
     wire [15:0]alu_out_w;
     wire [15:0]pc_out_w;
+    wire [15:0]pc_mux_out;
     wire [15:0]ireg_out_w;
     wire [15:0]pc_in_w;
     wire [6:0] stender_in_w;
@@ -108,14 +110,21 @@ module cpu_dp(
         .s(beq_adder_out_w)
     );
     
-    mux4 pc_mux(
+    mux2 pc_mux(
         .a(alu_out_w),
-        .b(beq_adder_out_w),
-        .c(inc_out_w),
-        .d(pc_out_w),
+        .b(inc_out_w),
         .sel(pc_mux_sel),
+        .out(pc_mux_out)
+        );
+    
+    //The BEQ instruction needs to be combinational, so it needs its own mux it can
+    //control with combinational logic
+    mux2 pc_mux_beq_override(
+        .a(pc_mux_out),
+        .b(beq_adder_out_w),
+        .sel(beq_override),
         .out(pc_in_w)
-    );
+        );
     
     mux4 regfile_wd0_mux(
         .a(inc_out_w),
