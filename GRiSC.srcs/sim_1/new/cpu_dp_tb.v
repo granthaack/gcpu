@@ -260,34 +260,72 @@ module cpu_dp_tb();
                         //Increment the state
                         instr_state = 1;
                     end
-                    
+                     
                     else if(instr_state == 1) begin
                         //Wait state, BIU is handling
-                        instr_state = 2;
+                         instr_state = 2;
                     end
-                    
+                     
                     else if(instr_state == 2) begin
-                        //BIU is handling the bus right now
-                        //Enable write to the regfile
-                        regfile_we0 = 1;
-                        //Mux the data from data memory to the register file
-                        regfile_wd0_mux_sel = 2'b10;
-                        instr_state = 3;
+                         //BIU is handling the bus right now
+                         //Enable write to the regfile
+                         regfile_we0 = 1;
+                         //Mux the data from data memory to the register file
+                         regfile_wd0_mux_sel = 2'b10;
+                         instr_state = 3;
                     end
-                    
+                     
                     else if(instr_state == 3) begin
-                        //BIU is handling the bus right now
-                        //Don't write to the regfile again
-                        regfile_we0 = 0;
-                        //Increase the program counter
-                        pc_mux_sel = 1'b1;
-                        pc_wr = 1;
-                        instr_state = 0;
+                         //BIU is handling the bus right now
+                         //Don't write to the regfile again
+                         regfile_we0 = 0;
+                         //Increase the program counter
+                         pc_mux_sel = 1'b1;
+                         pc_wr = 1;
+                         instr_state = 0;
+                         //Tell BIU that the read bus cyle is done
+                         get_data_mem = 0;
                     end
                 end
                 
                 //Perform SW instruction
                 if(opcode == 3'b101) begin
+                    if(instr_state == 0) begin
+                        //Put address on the bus
+                        //Mux ra from instruction to rd1
+                        regfile_rd1_mux_sel = 1'b0;
+                        //Mux sign-extended immediate to the ALU
+                        alu_a_mux_sel = 0;
+                        //Mux the data at rd0 to the ALU
+                        alu_b_mux_sel = 1;
+                        //Perform an addition in the ALU to get the offset data address
+                        alu_opcode = 0;
+                        //Ask the BIU to perform a write bus cycle on data memory
+                        give_data_mem = 1;
+                        //Increment the state
+                        instr_state = 1;
+                    end
+                    
+                    else if(instr_state == 1) begin
+                        //Wait state, BIU is handling
+                        //Data is already on bus
+                        instr_state = 2;
+                    end
+                    
+                    else if(instr_state == 2) begin
+                        //BIU is handling the bus right now
+                        instr_state = 3;
+                    end
+                    
+                    else if(instr_state == 3) begin
+                        //BIU is handling the bus right now
+                        //Increase the program counter
+                        pc_mux_sel = 1'b1;
+                        pc_wr = 1;
+                        instr_state = 0;
+                        //Tell BIU that write cycle is done
+                        give_data_mem = 0;
+                    end
                 end
                 
                 //Perform BEQ instruction
@@ -410,5 +448,15 @@ module cpu_dp_tb();
             //Jump to the location at reg1, store current PC at reg7
             instr_fetch({3'b111, 3'b111, 3'b001, 7'b0000000});
             instr_decode();
+            
+            $display("Performing SW Instruction...");
+            //Fetch a SW instruction
+            //Store the value at reg2 at [reg6] + 7'b0000100
+            instr_fetch({3'b101, 3'b010, 3'b110, 7'b0000100});
+            instr_decode();
+            instr_decode();
+            instr_decode();
+            instr_decode();
+            
         end
 endmodule

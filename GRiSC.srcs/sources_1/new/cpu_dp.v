@@ -74,7 +74,7 @@ module cpu_dp(
     wire [2:0]  ireg_rc_w;
     wire [2:0] rd1_mux_out_w;
         
-    assign regfile_rd1_w = data_mem_out;
+    assign data_mem_out = regfile_rd1_w;
     assign opcode = ireg_out_w[15:13];
     assign stender_in_w = ireg_out_w[6:0];
     assign shifter_in_w = ireg_out_w[9:0];
