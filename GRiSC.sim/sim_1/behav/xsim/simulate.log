@@ -1,0 +1,157 @@
+Vivado Simulator 2018.2
+Time resolution is 1 ps
+DREG PC: Resetting PC...
+DREG IR: Resetting IR...
+REGFILE: Resetting...
+Performing LW instruction...
+DREG IR: Writing 8000, replacing 0000 
+Performed instruction fetch, got opcode 100
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+Ticked up
+Before tick down
+Current Instruction State: 1
+After tick down
+Ticking up...
+Ticked up
+Before tick down
+Current Instruction State: 2
+After tick down
+Ticking up...
+REGFILE: Writing 0x0008 to 0x0, replacing 0x0000
+Ticked up
+Before tick down
+Current Instruction State: 3
+After tick down
+Ticking up...
+DREG PC: Writing 0001, replacing 0000 
+Ticked up
+Performing LW instruction...
+DREG IR: Writing 8401, replacing 8000 
+Performed instruction fetch, got opcode 100
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+Ticked up
+Before tick down
+Current Instruction State: 1
+After tick down
+Ticking up...
+Ticked up
+Before tick down
+Current Instruction State: 2
+After tick down
+Ticking up...
+REGFILE: Writing 0x0001 to 0x1, replacing 0x0000
+Ticked up
+Before tick down
+Current Instruction State: 3
+After tick down
+Ticking up...
+DREG PC: Writing 0002, replacing 0001 
+Ticked up
+Performing ADD instruction...
+DREG IR: Writing 0801, replacing 8401 
+Performed instruction fetch, got opcode 000
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+DREG PC: Writing 0003, replacing 0002 
+REGFILE: Writing 0x0009 to 0x2, replacing 0x0000
+Ticked up
+Performing ADDI instruction...
+DREG IR: Writing 2d7e, replacing 0801 
+Performed instruction fetch, got opcode 001
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+DREG PC: Writing 0004, replacing 0003 
+REGFILE: Writing 0x0007 to 0x3, replacing 0x0000
+Ticked up
+Performing NAND instruction...
+DREG IR: Writing 5182, replacing 2d7e 
+Performed instruction fetch, got opcode 010
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+DREG PC: Writing 0005, replacing 0004 
+REGFILE: Writing 0xfffe to 0x4, replacing 0x0000
+Ticked up
+Performing LUI instruction...
+DREG IR: Writing 7656, replacing 5182 
+Performed instruction fetch, got opcode 011
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+DREG PC: Writing 0006, replacing 0005 
+REGFILE: Writing 0x9580 to 0x5, replacing 0x0000
+Ticked up
+Performing BEQ instruction...
+DREG IR: Writing d708, replacing 7656 
+Performed instruction fetch, got opcode 110
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+DREG PC: Writing 0007, replacing 0006 
+Ticked up
+Performing LUI instruction...
+DREG IR: Writing 7a56, replacing d708 
+Performed instruction fetch, got opcode 011
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+DREG PC: Writing 0008, replacing 0007 
+REGFILE: Writing 0x9580 to 0x6, replacing 0x0000
+Ticked up
+Performing BEQ instruction...
+DREG IR: Writing d704, replacing 7a56 
+Performed instruction fetch, got opcode 110
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+DREG PC: Writing 000d, replacing 0008 
+Ticked up
+Performing JALR instruction...
+DREG IR: Writing fc80, replacing d704 
+Performed instruction fetch, got opcode 111
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+DREG PC: Writing 0001, replacing 000d 
+REGFILE: Writing 0x000e to 0x7, replacing 0x0000
+Ticked up
+Performing SW Instruction...
+DREG IR: Writing ab04, replacing fc80 
+Performed instruction fetch, got opcode 101
+Before tick down
+Current Instruction State: 0
+After tick down
+Ticking up...
+Ticked up
+Before tick down
+Current Instruction State: 1
+After tick down
+Ticking up...
+Ticked up
+Before tick down
+Current Instruction State: 2
+After tick down
+Ticking up...
+Ticked up
+Before tick down
+Current Instruction State: 3
+After tick down
+Ticking up...
+DREG PC: Writing 0002, replacing 0001 
+Ticked up

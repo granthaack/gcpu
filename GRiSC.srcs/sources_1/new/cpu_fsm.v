@@ -32,11 +32,11 @@ module cpu_fsm(
         output [15:0]instr_mem_addr,
         
         //Signals for the BIU
-        output reg give_instr_addr,
-        output reg get_instr_mem,
-        output reg give_data_addr,
-        output reg get_data_mem,
-        output reg give_data_mem,
+        output reg instr_addr,
+        output reg instr_rd,
+        output reg data_addr,
+        output reg data_rd,
+        output reg data_wr,
         
         //Signals for data path
         output reg regfile_rd1_mux_sel,
@@ -59,10 +59,26 @@ module cpu_fsm(
         input rst
     );
     
-    reg [1:0]instr_state;
+    reg [3:0]instr_state = 0;
     reg fetch_instr;
     
     always @ (negedge clk, posedge rst) begin
+        if(instr_state == 0) begin
+            //Initialize the control signals
+            init_ctrl_signals();
+            //Ask the memory for some instruction data
+            give_instr_addr = 1;
+            //instr_mem_in = instr;
+            ireg_wr = 1;
+            //Increment instr_state
+            instr_state = 1;
+        end
+        
+        else if(instr_state == 1) begin
+            //Wait
+        end
+        
+        
         //Perform PC handling at the end of each of the instruction decoding states
         pc_wr = 0;
         
@@ -279,16 +295,6 @@ module cpu_fsm(
     //TODO: Write instruction fetch task and change the give/get regs cause they're terrible
     task instr_fetch(input [15:0]instr);
         begin
-            //Initialize the control signals
-            init_ctrl_signals();
-            
-            //Ask the memory for some instruction data
-            give_instr_addr = 1;
-            //tick();
-            
-            //Simulate the memory giving the CPU instruction data
-            //instr_mem_in = instr;
-            ireg_wr = 1;
             //Write the instruction to the CPU instruction register
             tick();
             ireg_wr = 0;

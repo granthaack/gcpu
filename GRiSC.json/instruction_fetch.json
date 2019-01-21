@@ -1,0 +1,23 @@
+{signal: 
+ [, {name: 'clk', 	wave: 'lhlhlhlhl'},{},
+		['cpu fsm',
+            {name: 'instr_state', wave: '=.=.=.=.x', data: ["0", "1", "2", "3 (wait)", "4"]},
+            {name: 'ireg_wr', wave: 'l...h...l'},
+            {name: 'give_instr_data', wave: 'h.l......'} 
+		],
+		{},
+		['cpu biu',
+         {name: 'biu_state', wave: 'x=.=.=.=.', data: ["0", "1", "2", "3 (wait)"]},
+         {name: 'ale', wave: 'lh.l.....'},
+         {name: 'rd', wave: 'l..h.....'},
+         {name: 'instr_in', wave: 'l....h...'},
+         {name: 'instr_addr', wave: 'lh.l.....'},
+        ]
+],
+  foot:{
+     text:'Instruction Fetch',
+     tock:9
+   },
+ config: { hscale: 1 }
+}
+

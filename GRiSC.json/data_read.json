@@ -1,0 +1,24 @@
+{signal: 
+ [, {name: 'clk', 	wave: 'lhlhlhlhl'},{},
+		['cpu fsm',
+            {name: 'instr_state', wave: '=.=.=.=.x', data: ["0", "1", "2", "3 (wait)", "4"]},
+            {name: 'regfile_we', wave: 'l...h...l'},
+            {name: 'data_rd', wave: 'h.l......'} 
+		],
+		{},
+		['cpu biu',
+         {name: 'biu_state', wave: 'x=.=.=.=.', data: ["0", "1", "2", "3 (wait)"]},
+         {name: 'ale', wave: 'lh.l.....'},
+         {name: 'rd', wave: 'l..h.....'},
+         {name: 'data_in', wave: 'l..h.....'},
+         {name: 'data_addr', wave: 'lh.l.....'},
+         {name: 'bus', wave: 'z=.zz=...', data:["addr", "data"]}
+        ]
+],
+  foot:{
+     text:'Data Read',
+   },
+ config: { hscale: 1 }
+}
+
+

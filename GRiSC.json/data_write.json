@@ -1,0 +1,22 @@
+{signal: 
+ [, {name: 'clk', 	wave: 'lhlhlhl'},{},
+		['cpu fsm',
+            {name: 'instr_state', wave: '=.=.=.x', data: ["0", "1", "2", "3"]},
+            {name: 'data_wr', wave: 'h.l....'} 
+		],
+		{},
+		['cpu biu',
+         {name: 'biu_state', wave: 'x=.=.=.', data: ["0", "1", "2", "3 (wait)"]},
+         {name: 'ale', wave: 'lh.l...'},
+         {name: 'wr', wave: 'l..h...'},
+         {name: 'data_out', wave: 'l..h...'},
+         {name: 'data_addr', wave: 'lh.l...'},
+         {name: 'bus', wave: 'z=.=...', data: ["addr", "data"]}
+        ]
+],
+  foot:{
+     text:'Data Write',
+   },
+ config: { hscale: 1 }
+}
+
